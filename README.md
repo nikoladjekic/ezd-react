@@ -1,2 +1,3 @@
 # ezd-react
-React Project
+
+EZD React Project
