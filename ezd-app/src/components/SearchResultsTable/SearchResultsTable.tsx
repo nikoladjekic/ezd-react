@@ -9,6 +9,10 @@ interface SearchResultsTableProps {
 }
 
 const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) => {
+  const formatDate = (date: string): string => {
+    return new Date(date).toDateString();
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -17,8 +21,7 @@ const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) =>
             <TableCell>Categories</TableCell>
             <TableCell>Created at</TableCell>
             <TableCell>Updated at</TableCell>
-            <TableCell>Visit Page</TableCell>
-            <TableCell align="right">Joke</TableCell>
+            <TableCell>Joke</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -27,10 +30,9 @@ const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) =>
               <TableCell component="th" scope="row">
                 {row.categories[0]}
               </TableCell>
-              <TableCell align="right">{row.created_at}</TableCell>
-              <TableCell align="right">{row.updated_at}</TableCell>
-              <TableCell align="right">{row.url}</TableCell>
-              <TableCell align="right">{row.value}</TableCell>
+              <TableCell>{formatDate(row.created_at)}</TableCell>
+              <TableCell>{formatDate(row.updated_at)}</TableCell>
+              <TableCell>{row.value}</TableCell>
             </TableRow>
           ))}
         </TableBody>

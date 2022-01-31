@@ -1,54 +1,62 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader, TextField } from "@mui/material";
-import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
-import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import axios, { AxiosResponse } from "axios";
+import { TextField } from "@mui/material";
+
+import { IJoke } from "../../interfaces/joke";
+import SearchHistoryList from "../SearchHistoryList/SearchHistoryList";
+import SearchResultsTable from "../SearchResultsTable/SearchResultsTable";
 
 interface SearchBarProps {}
 
 const SearchBar: React.FC<SearchBarProps> = ({}) => {
+  const jokeBaseUrl = "https://api.chucknorris.io/jokes/search?query=";
   const [searchValue, setSearchValue] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
-  const jokeBaseUrl = "https://api.chucknorris.io/jokes/search?query=";
+  const [searchResults, setSearchResults] = useState<IJoke[]>([]);
 
   const onSearchType = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
+  const onResponseFetch = (response: IJoke[]) => {
+    console.log(response);
+
+    setSearchResults(response);
+    const maxHistoryItems = 10;
+    if (searchHistory.length < maxHistoryItems) {
+      setSearchHistory((history) => [searchValue, ...history]);
+    } else {
+      const history = [...searchHistory];
+      history.splice(maxHistoryItems, 1);
+      history.splice(0, 0, searchValue);
+      setSearchHistory([...history]);
+    }
+  };
+
   useEffect(() => {
     if (searchValue.length > 2) {
       const delaySearch = setTimeout(() => {
-        axios.get(jokeBaseUrl + searchValue).then((response: AxiosResponse) => {
-          setSearchHistory((history) => [...history, searchValue]);
-          console.log("joke --> ", response.data);
-          console.log("history --> ", searchHistory);
-        });
-      }, 1200);
+        axios
+          .get(jokeBaseUrl + searchValue, {
+            params: {
+              _limit: 10,
+            },
+          })
+          .then((response: AxiosResponse) => {
+            onResponseFetch(response.data.result);
+          });
+      }, 1000);
       return () => clearTimeout(delaySearch);
     }
   }, [searchValue]);
 
   return (
     <div>
-      <TextField id="standard-basic" label="Search for a joke" variant="standard" onChange={onSearchType} />
+      <TextField id="standard-basic" label="Search for a joke" variant="standard" onChange={onSearchType} value={searchValue} />
 
-      <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "ghostwhite" }}
-        aria-labelledby="search-history-subheader"
-        subheader={
-          <ListSubheader component="div" id="search-history-subheader">
-            Search History
-          </ListSubheader>
-        }
-      >
-        {searchHistory.map((value) => (
-          <ListItemButton>
-            <ListItemIcon>
-              <ManageSearchIcon />
-            </ListItemIcon>
-            <ListItemText primary={value} />
-          </ListItemButton>
-        ))}
-      </List>
+      {searchResults.length && <SearchResultsTable tableData={searchResults} />}
+
+      {searchHistory.length && <SearchHistoryList searchHistory={searchHistory} />}
     </div>
   );
 };
