@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
-import { Avatar, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 import { IJoke } from "../../interfaces/joke";
 

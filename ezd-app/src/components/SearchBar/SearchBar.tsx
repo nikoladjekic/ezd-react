@@ -37,7 +37,7 @@ const SearchBar: React.FC<SearchBarProps> = ({}) => {
         axios.get(jokeBaseUrl + searchValue).then((response: AxiosResponse) => {
           onResponseFetch(response.data.result.slice(0, maxListItems));
         });
-      }, 800);
+      }, 500);
       return () => clearTimeout(delaySearch);
     }
   }, [searchValue]);
