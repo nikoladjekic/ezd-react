@@ -19,7 +19,7 @@ const SearchBar: React.FC<SearchBarProps> = ({}) => {
   };
 
   const onResponseFetch = (response: IJoke[]) => {
-    console.log(response);
+    console.log(response); //TODO:
 
     setSearchResults(response);
     const maxHistoryItems = 10;

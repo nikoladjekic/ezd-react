@@ -17,8 +17,8 @@ const SearchHistoryList: React.FC<SearchHistoryListProps> = ({ searchHistory }) 
         </ListSubheader>
       }
     >
-      {searchHistory.map((value) => (
-        <ListItemButton>
+      {searchHistory.map((value, index) => (
+        <ListItemButton key={index}>
           <ListItemIcon>
             <ManageSearchIcon />
           </ListItemIcon>
