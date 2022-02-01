@@ -3,10 +3,10 @@ import SearchBar from "../SearchBar/SearchBar";
 
 interface LandingPageProps {}
 
-const LandingPage: React.FC<LandingPageProps> = ({}) => {
+const LandingPage: React.FC<LandingPageProps> = () => {
   return (
     <div>
-      <h1>EZD JOKES APP</h1>
+      <h1>CHUCK NORRIS JOKES</h1>
       <SearchBar />
     </div>
   );
