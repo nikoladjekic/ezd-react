@@ -9,11 +9,11 @@ interface SearchHistoryListProps {
 const SearchHistoryList: React.FC<SearchHistoryListProps> = ({ searchHistory }) => {
   return (
     <List
-      sx={{ width: "100%", maxWidth: 250, bgcolor: "ghostwhite" }}
+      sx={{ width: "100%", maxWidth: 350, bgcolor: "ghostwhite", margin: "20px" }}
       aria-labelledby="search-history-subheader"
       subheader={
         <ListSubheader component="div" id="search-history-subheader">
-          Search History
+          Recent Search History
         </ListSubheader>
       }
     >

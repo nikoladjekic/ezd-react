@@ -1,8 +1,9 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
+import { Avatar, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 import { IJoke } from "../../interfaces/joke";
-import { Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 interface SearchResultsTableProps {
   tableData: IJoke[];
@@ -15,7 +16,7 @@ const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) =>
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="search-results-table">
+      <Table sx={{ maxWidth: "100%", margin: "20px" }} aria-label="search-results-table">
         <TableHead>
           <TableRow>
             <TableCell>Icon</TableCell>
@@ -23,6 +24,7 @@ const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) =>
             <TableCell>Created at</TableCell>
             <TableCell>Updated at</TableCell>
             <TableCell>Joke</TableCell>
+            <TableCell>Link</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -35,6 +37,11 @@ const SearchResultsTable: React.FC<SearchResultsTableProps> = ({ tableData }) =>
               <TableCell>{formatDate(row.created_at)}</TableCell>
               <TableCell>{formatDate(row.updated_at)}</TableCell>
               <TableCell>{row.value}</TableCell>
+              <TableCell>
+                <a href={row.url} target="_blank" rel="noreferrer">
+                  <NorthEastIcon sx={{ mr: 1 }} />
+                </a>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

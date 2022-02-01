@@ -13,21 +13,19 @@ const SearchBar: React.FC<SearchBarProps> = ({}) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [searchResults, setSearchResults] = useState<IJoke[]>([]);
+  const maxListItems = 10;
 
   const onSearchType = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
   const onResponseFetch = (response: IJoke[]) => {
-    console.log(response); //TODO:
-
     setSearchResults(response);
-    const maxHistoryItems = 10;
-    if (searchHistory.length < maxHistoryItems) {
+    if (searchHistory.length < maxListItems) {
       setSearchHistory((history) => [searchValue, ...history]);
     } else {
       const history = [...searchHistory];
-      history.splice(maxHistoryItems, 1);
+      history.splice(maxListItems, 1);
       history.splice(0, 0, searchValue);
       setSearchHistory([...history]);
     }
@@ -36,27 +34,21 @@ const SearchBar: React.FC<SearchBarProps> = ({}) => {
   useEffect(() => {
     if (searchValue.length > 2) {
       const delaySearch = setTimeout(() => {
-        axios
-          .get(jokeBaseUrl + searchValue, {
-            params: {
-              _limit: 10,
-            },
-          })
-          .then((response: AxiosResponse) => {
-            onResponseFetch(response.data.result);
-          });
-      }, 1000);
+        axios.get(jokeBaseUrl + searchValue).then((response: AxiosResponse) => {
+          onResponseFetch(response.data.result.slice(0, maxListItems));
+        });
+      }, 800);
       return () => clearTimeout(delaySearch);
     }
   }, [searchValue]);
 
   return (
     <div>
-      <TextField id="standard-basic" label="Search for a joke" variant="standard" onChange={onSearchType} value={searchValue} />
+      <TextField id="standard-basic" label="Search for a joke" variant="standard" onChange={onSearchType} />
 
-      {searchResults.length && <SearchResultsTable tableData={searchResults} />}
+      {!!searchResults.length && <SearchResultsTable tableData={searchResults} />}
 
-      {searchHistory.length && <SearchHistoryList searchHistory={searchHistory} />}
+      {!!searchHistory.length && <SearchHistoryList searchHistory={searchHistory} />}
     </div>
   );
 };
